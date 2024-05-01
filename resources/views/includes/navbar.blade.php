@@ -40,7 +40,9 @@
     <span>informasi</span></a>
 </li>
 
-
+<div class="sidebar-heading">
+  fitur segera hadir
+</div>
 
 
 <li class="nav-item">
@@ -295,14 +297,15 @@
                   Profile
                 </a>
                 
-                <a class="dropdown-item" href="#">
+               <!-- <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
-                </a>
-                <a class="dropdown-item" href="#">
+                </a> --->
+
+               <!-- <a class="dropdown-item" href="#">
                   <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                   Activity Log
-                </a>
+                </a>  -->
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
