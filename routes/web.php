@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\JudulController;
 use App\Http\Controllers\utamaController;
 use App\Http\Controllers\Admin\InformasiController;
+use App\Http\Controllers\Admin\TentangKamiController;
+
 
 
 //halaman utama
@@ -36,6 +38,15 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::delete('/informasi/{informasi}', [InformasiController::class, 'destroy'])->name('admin.informasi.destroy');
 });
 
+// untuk mengakses tentang kami di halaman admin 
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('tentangkami', [TentangKamiController::class, 'index'])->name('tentangkami.index');
+    Route::get('tentangkami/create', [TentangKamiController::class, 'create'])->name('tentangkami.create');
+    Route::post('tentangkami', [TentangKamiController::class, 'store'])->name('tentangkami.store');
+    Route::get('tentangkami/{tentangkami}/edit', [TentangKamiController::class, 'edit'])->name('tentangkami.edit');
+    Route::put('tentangkami/{tentangkami}', [TentangKamiController::class, 'update'])->name('tentangkami.update');
+    Route::delete('tentangkami/{tentangkami}', [TentangKamiController::class, 'destroy'])->name('tentangkami.destroy');
+});
 
 
 //ketika user mengakses admin maka di arahkan ke index

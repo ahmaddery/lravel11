@@ -32,67 +32,18 @@
 
 <!-- Template Stylesheet -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-<!-- Custom CSS for Spinner -->
-<style>
-    .spinner {
-        /* Optional: Add background color or gradient */
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        border-radius: 10px;
-        padding: 20px;
-    }
 
-    .sk-cube-grid {
-        width: 50px;
-        height: 50px;
-    }
-
-    .sk-cube {
-        width: 33%;
-        height: 33%;
-        background-color: #fff; /* Change the color */
-        float: left;
-        animation: sk-cube-grid-animation 1.3s infinite ease-in-out; /* Change the animation speed */
-    }
-
-    @keyframes sk-cube-grid-animation {
-        33% {
-            transform: scale(1);
-        }
-        66% {
-            transform: scale(0.5);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-</style>
-<!-- SpinKit CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
     
 </head>
 
 <body>
-<!-- Spinner Start -->
-<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-    <div class="spinner">
-        <div class="sk-cube-grid">
-            <div class="sk-cube sk-cube1"></div>
-            <div class="sk-cube sk-cube2"></div>
-            <div class="sk-cube sk-cube3"></div>
-            <div class="sk-cube sk-cube4"></div>
-            <div class="sk-cube sk-cube5"></div>
-            <div class="sk-cube sk-cube6"></div>
-            <div class="sk-cube sk-cube7"></div>
-            <div class="sk-cube sk-cube8"></div>
-            <div class="sk-cube sk-cube9"></div>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
-</div>
-<!-- Spinner End -->
-
-
-
-
+    <!-- Spinner End -->
 
 
     <!-- Topbar Start -->
@@ -258,19 +209,27 @@
 
 
 <!-- About Start -->
+@foreach ($tentang_kami as $item)
 <div id="about" class="container-fluid bg-light overflow-hidden my-5 px-lg-0">
     <div class="container about px-lg-0">
         <div class="row g-0 mx-lg-0">
             <div class="col-lg-6 ps-lg-0" style="min-height: 400px;">
                 <div class="position-relative h-100">
-                    <img class="position-absolute img-fluid w-100 h-100" src="{{ asset('assets/img/about.jpg') }}" style="object-fit: cover;" alt="">
+                    @if ($item->foto)
+                    <img class="position-absolute img-fluid w-100 h-100" src="{{ Storage::url($item->foto) }}" alt="{{ $item->judul }}" style="object-fit: cover;" alt="">
+                @else
+                    <!-- Placeholder jika tidak ada foto -->
+                    <div class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center bg-secondary text-white">
+                        <span>Tidak ada foto</span>
+                    </div>
+                @endif
                 </div>
             </div>
             <div class="col-lg-6 about-text py-5 wow fadeIn" data-wow-delay="0.5s">
                 <div class="p-lg-5 pe-lg-0">
                     <div class="bg-primary mb-3" style="width: 60px; height: 2px;"></div>
-                    <h1 class="display-5 mb-4">Tentang Kami</h1>
-                    <p class="mb-4 pb-2">Kami adalah penyedia solusi keamanan CCTV terkemuka dengan layanan berkualitas dan solusi terpercaya. Kami hadir untuk memberikan perlindungan maksimal bagi rumah dan bisnis Anda.</p>
+                    <h1 class="display-5 mb-4">{{ $item->judul }}</h1>
+                    <p class="mb-4 pb-2">{{ $item->keterangan }}</p>
                     <div class="row g-4 mb-4 pb-3">
                         <div class="col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                             <div class="d-flex align-items-center">
@@ -278,7 +237,7 @@
                                     <i class="fas fa-users fa-3x text-primary"></i>
                                 </div>
                                 <div class="ms-4">
-                                    <h2 class="mb-1" data-toggle="counter-up">1234</h2>
+                                    <h2 class="mb-1" data-toggle="counter-up">{{ $item->pelanggan }}</h2>
                                     <p class="fw-medium text-primary mb-0">Pelanggan Puas</p>
                                 </div>
                             </div>
@@ -289,7 +248,7 @@
                                     <i class="fas fa-tasks fa-3x text-primary"></i>
                                 </div>
                                 <div class="ms-4">
-                                    <h2 class="mb-1" data-toggle="counter-up">1234</h2>
+                                    <h2 class="mb-1" data-toggle="counter-up">{{ $item->project }}</h2>
                                     <p class="fw-medium text-primary mb-0">Proyek Selesai</p>
                                 </div>
                             </div>
@@ -301,6 +260,7 @@
         </div>
     </div>
 </div>
+@endforeach
 <!-- About End -->
 
 
@@ -457,7 +417,7 @@
                         <p class="text-primary mb-2">Keamanan Bisnis</p>
                         <h5 class="lh-base mb-3">Sistem Keamanan CCTV Cerdas yang Sesuai dengan Bisnis Anda</h5>
                         <div class="d-flex justify-content-center">
-                            <a class="btn btn-square btn-primary rounded-circle mx-1" href="img/portfolio-1.jpg" data-lightbox="portfolio"><i class="fas fa-eye"></i></a>
+                            <a class="btn btn-square btn-primary rounded-circle mx-1" href="{{ asset('assets/img/portfolio-1.jpg') }}" data-lightbox="portfolio"><i class="fas fa-eye"></i></a>
                             <a class="btn btn-square btn-primary rounded-circle mx-1" href=""><i class="fas fa-link"></i></a>
                         </div>
                     </div>

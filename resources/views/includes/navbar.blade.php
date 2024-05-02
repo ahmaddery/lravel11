@@ -35,6 +35,13 @@
 </li>
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item active">
+  <a class="nav-link" href="{{ route('tentangkami.index') }}">
+    <i class="fas fa-fw fa-tachometer-alt"></i>
+    <span>tentang kami</span></a>
+</li>
+
+<!-- Nav Item - Pages Collapse Menu -->
+<li class="nav-item active">
   <a class="nav-link" href="{{ route('admin.informasi.index') }}">
     <i class="fas fa-fw fa-tachometer-alt"></i>
     <span>informasi</span></a>
