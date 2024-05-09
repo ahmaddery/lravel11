@@ -24,28 +24,43 @@
 
 <!-- Heading -->
 <div class="sidebar-heading">
-  Pengaturan Website
+  Interface Website
 </div>
 
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item active">
   <a class="nav-link" href="{{ route('admin.judul.index') }}">
-    <i class="fas fa-fw fa-tachometer-alt"></i>
+    <i class="fas fa-fw fa-pencil-alt"></i>
     <span>Judul</span></a>
 </li>
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item active">
   <a class="nav-link" href="{{ route('tentangkami.index') }}">
-    <i class="fas fa-fw fa-tachometer-alt"></i>
-    <span>tentang kami</span></a>
+    <i class="fas fa-fw fa-users"></i>
+    <span>Tentang Kami</span></a>
 </li>
 
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item active">
   <a class="nav-link" href="{{ route('admin.informasi.index') }}">
-    <i class="fas fa-fw fa-tachometer-alt"></i>
-    <span>informasi</span></a>
+    <i class="fas fa-fw fa-info-circle"></i>
+    <span>Informasi</span></a>
 </li>
+
+
+<!-- Heading -->
+<div class="sidebar-heading">
+  Data Website
+</div>
+
+<!-- Nav Item - Pages Collapse Menu -->
+<li class="nav-item active">
+  <a class="nav-link" href="{{ route('admin.products.index') }}">
+    <i class="fas fa-fw fa-shopping-basket"></i>
+    <span>Product</span></a>
+</li>
+
+
 
 <div class="sidebar-heading">
   fitur segera hadir

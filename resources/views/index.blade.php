@@ -96,6 +96,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-4 py-lg-0">
                 <a href="#home" class="nav-item nav-link active">Home</a>
+                <a href="{{ route('products.index') }}" class="nav-item nav-link">Produk</a>
                 <a href="#about" class="nav-item nav-link">About</a>
                 <a href="#service" class="nav-item nav-link">Service</a>
                 <a href="#project" class="nav-item nav-link">Project</a>

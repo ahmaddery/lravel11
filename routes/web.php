@@ -7,11 +7,17 @@ use App\Http\Controllers\Admin\JudulController;
 use App\Http\Controllers\utamaController;
 use App\Http\Controllers\Admin\InformasiController;
 use App\Http\Controllers\Admin\TentangKamiController;
+use App\Http\Controllers\Admin\ProductController;
 
 
 
 //halaman utama
 Route::get('/', [utamaController::class, 'index']);
+Route::get('/', [UtamaController::class, 'index'])->name('index');
+
+
+Route::get('/products', [UtamaController::class, 'showAllProducts'])->name('products.index');
+
 
 //route untuk judull
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
@@ -46,6 +52,16 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('tentangkami/{tentangkami}/edit', [TentangKamiController::class, 'edit'])->name('tentangkami.edit');
     Route::put('tentangkami/{tentangkami}', [TentangKamiController::class, 'update'])->name('tentangkami.update');
     Route::delete('tentangkami/{tentangkami}', [TentangKamiController::class, 'destroy'])->name('tentangkami.destroy');
+});
+
+// route untuk mengakses product dihalaman admin 
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/admin/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 });
 
 
