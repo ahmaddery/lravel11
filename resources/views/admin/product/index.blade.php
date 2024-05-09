@@ -94,7 +94,7 @@
     </td>
     
     <td>
-        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-primary">Edit</a>
+        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal">Edit</a>
         <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline">
             @csrf
             @method('DELETE')
@@ -200,6 +200,67 @@
     </div>
 </div>
 
+
+<!-- Modal Edit Produk -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Produk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form edit produk -->
+                <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <!-- Isi form sesuai dengan form edit yang sudah Anda miliki -->
+                    <div class="form-group">
+                        <label for="nama_product">Nama Produk</label>
+                        <input type="text" name="nama_product" id="nama_product" class="form-control" value="{{ $product->nama_product }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi</label>
+                        <textarea name="deskripsi" id="deskripsi" class="form-control" rows="5" required>{{ $product->deskripsi }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="harga">Harga</label>
+                        <input type="number" name="harga" id="harga" class="form-control" min="0" value="{{ $product->harga }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <input type="number" name="rating" id="rating" class="form-control" min="0" max="5" value="{{ $product->rating }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="foto">Foto Utama</label>
+                        <input type="file" name="foto" id="foto" class="form-control-file">
+                    </div>
+                    <div class="form-group">
+                        <label for="foto1">Foto 1</label>
+                        <input type="file" name="foto1" id="foto1" class="form-control-file">
+                    </div>
+                    <div class="form-group">
+                        <label for="foto2">Foto 2</label>
+                        <input type="file" name="foto2" id="foto2" class="form-control-file">
+                    </div>
+                    <div class="form-group">
+                        <label for="foto3">Foto 3</label>
+                        <input type="file" name="foto3" id="foto3" class="form-control-file">
+                    </div>
+                    <div class="form-group">
+                        <label for="foto4">Foto 4</label>
+                        <input type="file" name="foto4" id="foto4" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <style>/* CSS tambahan */
     .modal-content {
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -214,6 +275,22 @@
 <script>
     // Mengaktifkan CKEditor untuk textarea dengan id "deskripsi"
     CKEDITOR.replace('deskripsi');
+</script>
+
+
+<!-- Pastikan jQuery dimuat sebelum skrip -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Pastikan CKEditor diinisialisasi sebelum skrip yang menggunakannya -->
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+
+<script>
+    // Event listener untuk modal edit yang akan menginisialisasi CKEditor setelah modal ditampilkan
+    $('#editModal').on('shown.bs.modal', function () {
+        CKEDITOR.replace('deskripsi', {
+            removePlugins: 'toolbar,elementspath'
+        });
+    });
 </script>
 
 
