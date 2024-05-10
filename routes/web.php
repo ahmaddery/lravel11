@@ -12,11 +12,13 @@ use App\Http\Controllers\Admin\ProductController;
 
 
 //halaman utama
+Route::middleware('auth')->group(function () {
 Route::get('/', [utamaController::class, 'index']);
 Route::get('/', [UtamaController::class, 'index'])->name('index');
-
-
 Route::get('/products', [UtamaController::class, 'showAllProducts'])->name('products.index');
+
+});
+
 
 
 //route untuk judull

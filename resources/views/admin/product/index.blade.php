@@ -3,109 +3,109 @@
 
 <h1>Daftar Produk</h1>
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#tambahProdukModal">Tambah Produk</button>
+<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#tambahProdukModal">
+    <i class="fas fa-plus"></i> Tambah Produk
+</button>
+
 
 <form action="{{ route('admin.products.index') }}" method="GET" class="mb-2">
-    <div class="form-row">
-        <div class="col-md-4">
-            <input type="text" name="search" class="form-control" placeholder="Cari nama produk" value="{{ request('search') }}">
-        </div>
-        <div class="col-md-4">
-            <select name="rating" class="form-control">
-                <option value="">Pilih Rating</option>
-                <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1 Bintang</option>
-                <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2 Bintang</option>
-                <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3 Bintang</option>
-                <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4 Bintang</option>
-                <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 Bintang</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </div>
-        <div class="col-md-2">
-            @if(request()->filled('search') || request()->filled('rating'))
-                <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Reset Filter</a>
-            @endif
-        </div>
-    </div>
-</form>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Nama</th>
-            <th>Deskripsi</th>
-            <th>Harga</th>
-            <th>Rating</th>
-            <th>Foto Utama</th>
-            <th>Foto Tambahan</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-       @foreach ($products as $key => $product)
-<tr>
-    <td>{{ $key + 1 + ($products->perPage() * ($products->currentPage() - 1)) }}</td>
-    <td>{{ $product->nama_product }}</td>
-    <td>{!! $product->deskripsi !!}</td> 
-    <td>Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
-    <td>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-        <style>
-            .star i.fas.fa-star {
-                color: gold;
-            }
-        </style>
-        
-        <div class="rating">
-            @for ($i = 1; $i <= 5; $i++)
-                @if ($i <= $product->rating)
-                    <span class="star"><i class="fas fa-star"></i></span>
-                @else
-                    <span class="star"><i class="far fa-star"></i></span>
+    <form action="{{ route('admin.products.index') }}" method="GET" class="mb-4">
+        <div class="form-row align-items-center">
+            <div class="col-md-4 mb-2 mb-md-0">
+                <input type="text" name="search" class="form-control" placeholder="Cari nama produk" value="{{ request('search') }}">
+            </div>
+            <div class="col-md-4 mb-2 mb-md-0">
+                <select name="rating" class="form-control">
+                    <option value="">Pilih Rating</option>
+                    <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1 Bintang</option>
+                    <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2 Bintang</option>
+                    <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3 Bintang</option>
+                    <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4 Bintang</option>
+                    <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 Bintang</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
+            </div>
+            <div class="col-md-2">
+                @if(request()->filled('search') || request()->filled('rating'))
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-secondary"><i class="fas fa-sync-alt"></i> Reset Filter</a>
                 @endif
-            @endfor
+            </div>
         </div>
-        
-    </td>
-    <td>
-        @if ($product->foto)
-            <img src="{{ asset('storage/foto_produk/'.$product->foto) }}" alt="Foto Utama" style="max-width: 60px; max-height: 60px;">
-        @else
-            <p>Tidak ada foto utama</p>
-        @endif
-    </td>
-    <td>
-        @if ($product->foto1)
-            <img src="{{ asset('storage/foto_produk/'.$product->foto1) }}" alt="Foto 1" style="max-width: 50px; max-height: 50px;">
-        @endif
-        @if ($product->foto2)
-            <img src="{{ asset('storage/foto_produk/'.$product->foto2) }}" alt="Foto 2" style="max-width: 50px; max-height: 50px;">
-        @endif
-        @if ($product->foto3)
-            <img src="{{ asset('storage/foto_produk/'.$product->foto3) }}" alt="Foto 3" style="max-width: 50px; max-height: 50px;">
-        @endif
-        @if ($product->foto4)
-            <img src="{{ asset('storage/foto_produk/'.$product->foto4) }}" alt="Foto 4" style="max-width: 50px; max-height: 50px;">
-        @endif
-    </td>
+    </form>
     
-    <td>
-        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal">Edit</a>
-        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">Hapus</button>
-        </form>
-    </td>
-</tr>
-@endforeach
-    </tbody>
-</table>
-
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th class="align-middle">#</th>
+                    <th class="align-middle">Nama</th>
+                    <th class="align-middle">Deskripsi</th>
+                    <th class="align-middle">Harga</th>
+                    <th class="align-middle">Rating</th>
+                    <th class="align-middle">Foto Utama</th>
+                    <th class="align-middle">Foto Tambahan</th>
+                    <th class="align-middle">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($products as $key => $product)
+                <tr>
+                    <td>{{ $key + 1 + ($products->perPage() * ($products->currentPage() - 1)) }}</td>
+                    <td class="product-name">{{ $product->nama_product }}</td>
+                    <td>{!! Str::limit($product->deskripsi, 50) !!}</td>
+                    <td>Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
+                    <td>
+                        <div class="rating">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $product->rating)
+                                    <span class="star"><i class="fas fa-star"></i></span>
+                                @else
+                                    <span class="star"><i class="far fa-star"></i></span>
+                                @endif
+                            @endfor
+                        </div>
+                    </td>
+                    <td>
+                        @if ($product->foto)
+                            <img src="{{ asset('storage/foto_produk/'.$product->foto) }}" alt="Foto Utama" class="img-thumbnail" width="60" height="60">
+                        @else
+                            <p class="text-muted">Tidak ada foto utama</p>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="additional-photos">
+                            @if ($product->foto1)
+                                <img src="{{ asset('storage/foto_produk/'.$product->foto1) }}" alt="Foto 1" class="img-thumbnail" width="40" height="40">
+                            @endif
+                            @if ($product->foto2)
+                                <img src="{{ asset('storage/foto_produk/'.$product->foto2) }}" alt="Foto 2" class="img-thumbnail" width="40" height="40">
+                            @endif
+                            @if ($product->foto3)
+                                <img src="{{ asset('storage/foto_produk/'.$product->foto3) }}" alt="Foto 3" class="img-thumbnail" width="40" height="40">
+                            @endif
+                            @if ($product->foto4)
+                                <img src="{{ asset('storage/foto_produk/'.$product->foto4) }}" alt="Foto 4" class="img-thumbnail" width="40" height="40">
+                            @endif
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')"><i class="fas fa-trash-alt"></i> Hapus</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
 <div class="d-flex justify-content-center">
     <nav aria-label="Page navigation">
         <ul class="pagination">
@@ -201,64 +201,6 @@
 </div>
 
 
-<!-- Modal Edit Produk -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Produk</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Form edit produk -->
-                <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <!-- Isi form sesuai dengan form edit yang sudah Anda miliki -->
-                    <div class="form-group">
-                        <label for="nama_product">Nama Produk</label>
-                        <input type="text" name="nama_product" id="nama_product" class="form-control" value="{{ $product->nama_product }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="deskripsi">Deskripsi</label>
-                        <textarea name="deskripsi" id="deskripsi" class="form-control" rows="5" required>{{ $product->deskripsi }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="harga">Harga</label>
-                        <input type="number" name="harga" id="harga" class="form-control" min="0" value="{{ $product->harga }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="rating">Rating</label>
-                        <input type="number" name="rating" id="rating" class="form-control" min="0" max="5" value="{{ $product->rating }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto">Foto Utama</label>
-                        <input type="file" name="foto" id="foto" class="form-control-file">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto1">Foto 1</label>
-                        <input type="file" name="foto1" id="foto1" class="form-control-file">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto2">Foto 2</label>
-                        <input type="file" name="foto2" id="foto2" class="form-control-file">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto3">Foto 3</label>
-                        <input type="file" name="foto3" id="foto3" class="form-control-file">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto4">Foto 4</label>
-                        <input type="file" name="foto4" id="foto4" class="form-control-file">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <style>/* CSS tambahan */

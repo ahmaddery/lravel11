@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -12,7 +13,10 @@ class HomeController extends Controller
         // Mengambil total pengguna dengan usertype 'user' dari database
         $totalUsers = User::where('usertype', 'user')->count();
 
-        // Mengirim data total pengguna ke view 'admin.dashboard'
-        return view('admin.dashboard', compact('totalUsers'));
+        // Mengambil total produk dari database
+        $totalProducts = Product::count();
+
+        // Mengirim data total pengguna dan total produk ke view 'admin.dashboard'
+        return view('admin.dashboard', compact('totalUsers', 'totalProducts'));
     }
 }
