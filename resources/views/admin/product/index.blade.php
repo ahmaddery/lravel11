@@ -69,7 +69,8 @@
                     </td>
                     <td>
                         @if ($product->foto)
-                            <img src="{{ asset('storage/foto_produk/'.$product->foto) }}" alt="Foto Utama" class="img-thumbnail" width="60" height="60">
+                        <img src="{{ Storage::url('foto_produk/'.$product->foto) }}" alt="Foto Utama" class="img-thumbnail" width="60" height="60">
+
                         @else
                             <p class="text-muted">Tidak ada foto utama</p>
                         @endif

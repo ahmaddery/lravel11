@@ -131,13 +131,15 @@
             <div class="navbar-nav ms-auto py-4 py-lg-0">
                 <a href="{{ route('index') }}" class="nav-item nav-link">Home</a>
                 <a href="{{ route('products.index') }}" class="nav-item nav-link active">Produk</a>
+                <a href="{{ route('keranjang') }}" class="nav-item nav-link"><i class="fas fa-shopping-cart"></i></a>
             </div>
-
         </div>
+        
     </nav>
     <!-- Navbar End -->
-<!-- Product Showcase Section -->
-<section class="py-5">
+
+  <!-- Product Showcase Section -->
+  <section class="py-5">
     <div class="container">
         <div class="row row-cols-1 row-cols-md-5 g-4 justify-content-center">
             @if ($products->count() > 0)
@@ -156,7 +158,6 @@
                         </div>
                         <div class="card-footer d-flex justify-content-between align-items-center">
                             <div>
-                                
                                 <div class="rating">
                                     @for ($i = 1; $i <= 5; $i++)
                                         @if ($i <= $product->rating)
@@ -166,18 +167,23 @@
                                         @endif
                                     @endfor
                                 </div>
-                                
                             </div>
                             <div class="btn-group">
+                            <!-- Form untuk menambahkan produk ke keranjang -->
+                            <form id="addToCartForm{{ $key }}" action="{{ route('keranjang.tambah', ['productId' => $product->id]) }}" method="POST">
+                                @csrf
+                                <button type="button" onclick="addToCart({{ $key }})" class="btn btn-sm btn-outline-secondary btn-icon btn-animate" data-product-id="{{ $product->id }}" data-is-logged-in="{{ Auth::check() ? 'true' : 'false' }}">
+                                    <i class="bi bi-cart-plus-fill"></i>
+                                </button>
+                            </form>
+                            <!-- End Form -->
                                 <button type="button" class="btn btn-sm btn-view-details btn-icon btn-animate" data-bs-toggle="modal" data-bs-target="#productModal{{ $key }}"><i class="bi bi-eye-fill"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-icon btn-animate"><i class="bi bi-cart-plus-fill"></i></button>
                             </div>
                             <small class="text-muted">Rp {{ number_format($product->harga, 0, ',', '.') }}</small>
                         </div>
                     </div>
                 </div>
                 <!-- End Product Item -->
-                <!-- Repeat this product card block for each product -->
                 @endforeach
             @else
                 <p>Tidak ada produk yang tersedia saat ini.</p>
@@ -185,7 +191,9 @@
         </div>
     </div>
 </section>
+<!-- End Product Showcase Section -->
 
+<!-- Pagination -->
 <div class="d-flex justify-content-center">
     <nav aria-label="Page navigation">
         <ul class="pagination">
@@ -203,69 +211,110 @@
         </ul>
     </nav>
 </div>
+<!-- End Pagination -->
 
-
-
-<!-- End Product Showcase Section -->
 <!-- Product Modals -->
 @if ($products && count($products) > 0)
-    @foreach ($products as $key => $product)
-    <div class="modal fade" id="productModal{{ $key }}" tabindex="-1" aria-labelledby="productModalLabel{{ $key }}" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel{{ $key }}">Product Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="carouselExampleControls{{ $key }}" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            @if ($product->foto1 || $product->foto2 || $product->foto3 || $product->foto4)
-                                @if ($product->foto1)
-                                <div class="carousel-item active">
-                                    <img src="{{ asset('storage/foto_produk/' . $product->foto1) }}" class="d-block w-100" alt="Product Image 1">
-                                </div>
-                                @endif
-                                @if ($product->foto2)
-                                <div class="carousel-item">
-                                    <img src="{{ asset('storage/foto_produk/' . $product->foto2) }}" class="d-block w-100" alt="Product Image 2">
-                                </div>
-                                @endif
-                                @if ($product->foto3)
-                                <div class="carousel-item">
-                                    <img src="{{ asset('storage/foto_produk/' . $product->foto3) }}" class="d-block w-100" alt="Product Image 3">
-                                </div>
-                                @endif
-                                @if ($product->foto4)
-                                <div class="carousel-item">
-                                    <img src="{{ asset('storage/foto_produk/' . $product->foto4) }}" class="d-block w-100" alt="Product Image 4">
-                                </div>
-                                @endif
-                            @else
-                                <!-- Jika produk tidak memiliki foto, gunakan foto default -->
-                                <div class="carousel-item active">
-                                    <img src="https://via.placeholder.com/600x400" class="d-block w-100" alt="Default Product Image">
-                                </div>
+@foreach ($products as $key => $product)
+<div class="modal fade" id="productModal{{ $key }}" tabindex="-1" aria-labelledby="productModalLabel{{ $key }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel{{ $key }}">Product Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="carouselExampleControls{{ $key }}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @if ($product->foto1 || $product->foto2 || $product->foto3 || $product->foto4)
+                            @if ($product->foto1)
+                            <div class="carousel-item active">
+                                <img src="{{ asset('storage/foto_produk/' . $product->foto1) }}" class="d-block w-100" alt="Product Image 1">
+                            </div>
                             @endif
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls{{ $key }}" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls{{ $key }}" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+                            @if ($product->foto2)
+                            <div class="carousel-item">
+                                <img src="{{ asset('storage/foto_produk/' . $product->foto2) }}" class="d-block w-100" alt="Product Image 2">
+                            </div>
+                            @endif
+                            @if ($product->foto3)
+                            <div class="carousel-item">
+                                <img src="{{ asset('storage/foto_produk/' . $product->foto3) }}" class="d-block w-100" alt="Product Image 3">
+                            </div>
+                            @endif
+                            @if ($product->foto4)
+                            <div class="carousel-item">
+                                <img src="{{ asset('storage/foto_produk/' . $product->foto4) }}" class="d-block w-100" alt="Product Image 4">
+                            </div>
+                            @endif
+                        @else
+                            <!-- Jika produk tidak memiliki foto, gunakan foto default -->
+                            <div class="carousel-item active">
+                                <img src="https://via.placeholder.com/600x400" class="d-block w-100" alt="Default Product Image">
+                            </div>
+                        @endif
                     </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls{{ $key }}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls{{ $key }}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-    @endforeach
+</div>
+@endforeach
 @endif
+
+
+
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function addToCart(key) {
+        // Submit form untuk menambahkan produk ke keranjang
+        document.getElementById("addToCartForm" + key).submit();
+        // Tampilkan SweetAlert2 ketika berhasil menambahkan ke keranjang
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Produk berhasil ditambahkan ke keranjang.'
+        });
+    }
+
+    // Tambahkan event listener untuk tombol tambah ke keranjang
+    document.addEventListener('DOMContentLoaded', function() {
+        const addToCartButtons = document.querySelectorAll('.btn-animate');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const productId = button.getAttribute('data-product-id');
+                const isLoggedIn = button.getAttribute('data-is-logged-in');
+
+                if (isLoggedIn === 'false') {
+                    // Jika pengguna belum masuk, tampilkan SweetAlert2 untuk login terlebih dahulu
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.'
+                    });
+                } else {
+                    // Jika pengguna sudah masuk, tambahkan produk ke keranjang
+                    addToCart(productId);
+                }
+            });
+        });
+    });
+</script>
+
 
 
 

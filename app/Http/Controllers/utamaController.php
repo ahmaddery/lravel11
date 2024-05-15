@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Judul;
-use App\Models\Informasi; // Mengimport model Informasi
+use App\Models\Informasi;
 use App\Models\TentangKami;
 use App\models\product;
 use Illuminate\Http\Request;

@@ -8,15 +8,22 @@ use App\Http\Controllers\utamaController;
 use App\Http\Controllers\Admin\InformasiController;
 use App\Http\Controllers\Admin\TentangKamiController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\KeranjangController;
+
 
 
 
 //halaman utama
-Route::middleware('auth')->group(function () {
+//Route::middleware('auth')->group(function () {
 Route::get('/', [utamaController::class, 'index']);
 Route::get('/', [UtamaController::class, 'index'])->name('index');
 Route::get('/products', [UtamaController::class, 'showAllProducts'])->name('products.index');
-
+//});
+Route::middleware('auth')->group(function () {
+    Route::post('/tambah-ke-keranjang/{productId}', [KeranjangController::class, 'tambahkanKeKeranjang'])->name('keranjang.tambah');
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang');
+    Route::put('/keranjang/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
+    Route::delete('/keranjang/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
 });
 
 
